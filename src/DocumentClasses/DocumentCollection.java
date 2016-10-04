@@ -96,7 +96,6 @@ public class DocumentCollection implements Serializable {
     public void documentCollection(String fileName) throws IOException {
         Scanner scanner = new Scanner(new File(fileName));
 
-        int count = 0;
         int currentDocId = -1;
         boolean insideDoc = false;
         while (scanner.hasNext()) {

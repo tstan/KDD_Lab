@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * Create a documentcollection using documents.txt and serialize to a file
  * @author tstan
  */
 public class Lab1 {
