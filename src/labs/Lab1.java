@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.*;
 
 /**
- *
  * @author tstan
  */
 public class Lab1 {
