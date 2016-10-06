@@ -162,9 +162,9 @@ public class DocumentCollection implements Serializable {
     /**
      * calls normalize on each document
      */
-    public void normalize() {
+    public void normalize(DocumentCollection doc) {
         for (Integer i : documents.keySet()) {
-            documents.get(i).normalize(this);
+            documents.get(i).normalize(doc);
         }
     }
 

@@ -37,8 +37,8 @@ public class Lab2 {
         queries.documentCollection("queries.txt", "queries");
 
         //normalize
-        queries.normalize();
-        documents.normalize();
+        queries.normalize(documents);
+        documents.normalize(documents);
 
         //find cosine distance
 

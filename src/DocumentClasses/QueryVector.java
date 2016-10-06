@@ -25,7 +25,10 @@ public class QueryVector extends TextVector {
 
             double idf = 0.0;
             if (documents.getDocumentFrequency(word) > 0) {
-                idf = log(((double) documents.getSize() / (double) documents.getDocumentFrequency(word)), BASE_TWO);
+                double docSize = documents.getSize();
+                double docFreq = documents.getDocumentFrequency(word);
+
+                idf = log((docSize/docFreq), BASE_TWO);
             }
 
             normalizedVector.put(word, tf * idf);

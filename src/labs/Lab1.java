@@ -19,8 +19,7 @@ public class Lab1 {
         newDC.printResults();
         
         /* serialize document collection to file */
-        try(ObjectOutputStream os = new ObjectOutputStream(new
-                    FileOutputStream(new File("docvector")))){
+        try(ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(new File("docvector")))){
             os.writeObject(newDC);
         } 
         catch(Exception e){

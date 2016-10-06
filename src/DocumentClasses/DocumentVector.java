@@ -18,11 +18,7 @@ public class DocumentVector extends TextVector {
         for (String word : rawVector.keySet()) {
             double tf =  (double) getRawFrequency(word) / (double) getHighestRawFrequency();
 
-            double idf = 0.0;
-
-            if (documents.getDocumentFrequency(word) > 0) {
-                idf = log(((double) documents.getSize() / (double) documents.getDocumentFrequency(word)), BASE_TWO);
-            }
+            double idf = log(((double) documents.getSize() / (double) documents.getDocumentFrequency(word)), BASE_TWO);
 
             normalizedVector.put(word, tf * idf);
         }
