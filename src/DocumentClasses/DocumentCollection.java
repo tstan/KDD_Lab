@@ -8,6 +8,8 @@ import java.io.*;
  */
 public class DocumentCollection implements Serializable {
 
+    public static final String DOCUMENT = "document";
+
     public static String noiseWordArray[] = {"a", "about", "above", "all", "along", "also", "although", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "but", "by", "can", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "e.g.", "either", "etc", "etc.", "even", "ever", "enough", "for", "from", "further", "get", "gets", "got", "had", "have", "hardly", "has", "hasn't", "having", "he", "hence", "her", "here", "hereby", "herein", "hereof", "hereon", "hereto", "herewith", "him", "his", "how", "however", "i", "i.e.", "if", "in", "into", "it", "it's", "its", "me", "more", "most", "mr", "my", "near", "nor", "now", "no", "not", "or", "on", "of", "onto", "other", "our", "out", "over", "really", "said", "same", "she", "should", "shouldn't", "since", "so", "some", "such", "than", "that", "the", "their", "them", "then", "there", "thereby", "therefore", "therefrom", "therein", "thereof", "thereon", "thereto", "therewith", "these", "they", "this", "those", "through", "thus", "to", "too", "under", "until", "unto", "upon", "us", "very", "was", "wasn't", "we", "were", "what", "when", "where", "whereby", "wherein", "whether", "which", "while", "who", "whom", "whose", "why", "with", "without", "would", "you", "your", "yours", "yes"};
 
     public static List<String> noiseWordList = Arrays.asList(noiseWordArray);
@@ -93,7 +95,7 @@ public class DocumentCollection implements Serializable {
      *
      * @param fileName
      */
-    public void documentCollection(String fileName) throws IOException {
+    public void documentCollection(String fileName, String type) throws IOException {
         Scanner scanner = new Scanner(new File(fileName));
 
         int currentDocId = -1;
@@ -105,7 +107,13 @@ public class DocumentCollection implements Serializable {
                 insideDoc = false;
                 // set Id
                 currentDocId = Integer.valueOf(scanner.next());
-                documents.put(currentDocId, new TextVector());
+
+                if (type.equals(DOCUMENT)) {
+                    documents.put(currentDocId, new DocumentVector());
+                }
+                else {
+                    documents.put(currentDocId, new QueryVector());
+                }
 
                 // find start of body
                 while (!insideDoc) {
@@ -149,6 +157,15 @@ public class DocumentCollection implements Serializable {
         System.out.println("Sum of Distinct Number of Words = " + sum);
         System.out.println("Total word count = " + total);
 
+    }
+
+    /**
+     * calls normalize on each document
+     */
+    public void normalize() {
+        for (Integer i : documents.keySet()) {
+            documents.get(i).normalize(this);
+        }
     }
 
     private boolean isNoiseWord(String word) {

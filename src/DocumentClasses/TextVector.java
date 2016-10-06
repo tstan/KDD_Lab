@@ -2,6 +2,8 @@ package DocumentClasses;
 
 import java.util.*;
 import java.io.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * @author tstan
@@ -10,13 +12,14 @@ public abstract class TextVector implements Serializable {
 
     /* key is word and value is frequency*/
     public HashMap<String, Integer> rawVector = new HashMap<>();
+    public static final int BASE_TWO = 2;
 
     /**
      * returns entry set of rawVector
      *
      * @return
      */
-    public Set<Map.Entry<String, Integer>> getRawVectorEntrySet() {
+    public Set<Entry<String, Integer>> getRawVectorEntrySet() {
         return rawVector.entrySet();
     }
 
@@ -79,7 +82,8 @@ public abstract class TextVector implements Serializable {
     public int getHighestRawFrequency() {
 
         try {
-            return rawVector.values().stream().mapToInt(Integer::intValue).max().getAsInt();
+            int test = rawVector.values().stream().mapToInt(Integer::intValue).max().getAsInt();
+            return test;
         } catch (NoSuchElementException e) {
             return 0;
         }
@@ -99,7 +103,7 @@ public abstract class TextVector implements Serializable {
      *
      * @return
      */
-    public abstract Set<Map.Entry<String,Double>> getNormalizedVectorEntrySet();
+    public abstract Set<Entry<String,Double>> getNormalizedVectorEntrySet();
 
     /**
      * Normalizes the frequency of each word using TF-IDF formula
@@ -126,7 +130,7 @@ public abstract class TextVector implements Serializable {
 
         for (String word : rawVector.keySet()) {
             double currentFrequency = getNormalizedFrequency(word);
-            frequencySum += currentFrequency * currentFrequency;
+            frequencySum += (currentFrequency * currentFrequency);
         }
 
         return Math.sqrt(frequencySum);
@@ -138,9 +142,33 @@ public abstract class TextVector implements Serializable {
      * @param documents
      * @return the 20 closest documents' IDs in a list.
      */
-    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents) {
-        //TODO: add DocumentDistance and findDistance
+    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
+        HashMap<Integer, Double> distanceMap = new HashMap<>();
+        for (Integer i : documents.documents.keySet()) {
 
-        return null;
+            // There are documents that contain no text.
+            // If a document is empty, the distance from it to any query should be equal to 0
+            if (documents.getDocumentById(i).getTotalWordCount() > 0) {
+                distanceMap.put(i, distanceAlg.findDistance(this, documents.getDocumentById(i), documents));
+            }
+            else {
+                distanceMap.put(i, 0.0);
+            }
+        }
+
+        List<Map.Entry<Integer, Double>> list = distanceMap.entrySet().stream().collect(Collectors.toList());
+        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        list.stream().limit(20).collect(Collectors.toList());
+        ArrayList<Integer> ids = list.stream()
+                .map(Entry::getKey)
+                .limit(20)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return ids;
+    }
+
+    public double log(double x, int base)
+    {
+        return (Math.log(x) / Math.log(base));
     }
 }

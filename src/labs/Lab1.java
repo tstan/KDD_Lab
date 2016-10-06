@@ -13,7 +13,7 @@ public class Lab1 {
     public static void main(String args[]) throws IOException{
         
         DocumentCollection newDC = new DocumentCollection();
-        newDC.documentCollection("documents.txt");
+        newDC.documentCollection("documents.txt", "document");
                 
         /* print debug results for lab 1 */
         newDC.printResults();
