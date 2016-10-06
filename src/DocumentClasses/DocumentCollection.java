@@ -160,11 +160,32 @@ public class DocumentCollection implements Serializable {
     }
 
     /**
-     * calls normalize on each document
+     * calls normalize on each document in queries or documents
      */
-    public void normalize(DocumentCollection doc) {
+    public void normalize(DocumentCollection allDocs) {
         for (Integer i : documents.keySet()) {
-            documents.get(i).normalize(doc);
+            documents.get(i).normalize(allDocs);
+        }
+    }
+
+    /**
+     * print method for results in Lab 2 for TF-IDF cosine distance
+     * @param totalToProcess total queries to process
+     * @param allDocs full document collection
+     */
+    public void printClosestDocsCosineDistance(int totalToProcess, DocumentCollection allDocs) {
+        if (totalToProcess < 0 || totalToProcess > this.getSize()) {
+            throw new IndexOutOfBoundsException(
+                    "The amount of queries asked for must be between 0 and " + this.getSize());
+        }
+
+        Iterator<Map.Entry<Integer, TextVector>> queryIterator = this.getEntrySet().iterator();
+        int num = 0;
+        while (queryIterator.hasNext() && num++ < totalToProcess) {
+            int key = queryIterator.next().getKey();
+            ArrayList<Integer> closest = this.getDocumentById(key)
+                    .findClosestDocuments(allDocs, new CosineDistance());
+            System.out.println("documents for query " + key + ": " + closest.toString());
         }
     }
 

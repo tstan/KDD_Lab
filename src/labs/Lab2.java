@@ -3,12 +3,17 @@ package labs;
 import DocumentClasses.CosineDistance;
 import DocumentClasses.DocumentCollection;
 import DocumentClasses.TextVector;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
+import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Compute the top 20 documents for each query using the
@@ -18,11 +23,13 @@ import java.util.ArrayList;
  */
 public class Lab2 {
 
-    public static DocumentCollection documents;
+    // change this to process more or less queries.
+    public static final int TOTAL_TO_PROCESS = 3;
 
+    public static DocumentCollection documents;
     public static DocumentCollection queries;
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, IndexOutOfBoundsException {
 
         //deserialize docvector from Lab1 into DocumentCollection
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File("docvector")))) {
@@ -40,15 +47,7 @@ public class Lab2 {
         queries.normalize(documents);
         documents.normalize(documents);
 
-        //find cosine distance
-
-        try {
-            ArrayList<Integer> closest = queries.getDocumentById(1).findClosestDocuments(documents, new CosineDistance());
-            System.out.println("documents for query " + 1 + ": " + closest.toString());
-        }
-        catch (Exception e) {
-            System.out.println("broke at query id" + 1);
-        }
-
+        //calculate cosine distance and print 20 closest.
+        queries.printClosestDocsCosineDistance(TOTAL_TO_PROCESS, documents);
     }
 }
