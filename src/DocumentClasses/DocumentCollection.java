@@ -172,21 +172,52 @@ public class DocumentCollection implements Serializable {
      * print method for results in Lab 2 for TF-IDF cosine distance
      * @param totalToProcess total queries to process
      * @param allDocs full document collection
+     *
+     * @return A hashmap of query number -> 20 closest documents
      */
-    public void printClosestDocsCosineDistance(int totalToProcess, DocumentCollection allDocs) {
+    public HashMap<Integer, ArrayList<Integer>> printClosestDocsCosineDistance(int totalToProcess, DocumentCollection allDocs) {
         if (totalToProcess < 0 || totalToProcess > this.getSize()) {
             throw new IndexOutOfBoundsException(
                     "The amount of queries asked for must be between 0 and " + this.getSize());
         }
 
+        HashMap<Integer, ArrayList<Integer>> queryToDistMap = new HashMap<>();
+
         Iterator<Map.Entry<Integer, TextVector>> queryIterator = this.getEntrySet().iterator();
-        int num = 0;
-        while (queryIterator.hasNext() && num++ < totalToProcess) {
+        int num = 1;
+        while (queryIterator.hasNext() && num <= totalToProcess) {
             int key = queryIterator.next().getKey();
             ArrayList<Integer> closest = this.getDocumentById(key)
                     .findClosestDocuments(allDocs, new CosineDistance());
-            System.out.println("documents for query " + key + ": " + closest.toString());
+            queryToDistMap.put(num, closest);
+            num++;
+            //System.out.println("documents for query " + key + ": " + closest.toString());
         }
+
+        return queryToDistMap;
+    }
+
+    /**
+     * Finds Okapi distance for all docs and prints the 20 closest documents.
+     * @param allDocs
+     * @return
+     */
+    public HashMap<Integer, ArrayList<Integer>> getClosestOkapiDistance(DocumentCollection allDocs) {
+        HashMap<Integer, ArrayList<Integer>> queryToDistMap = new HashMap<>();
+
+        int count = 1;
+        for (Map.Entry<Integer, TextVector> integerTextVectorEntry : this.getEntrySet()) {
+            if (count == 21) {
+                break;
+            }
+            int key = integerTextVectorEntry.getKey();
+            ArrayList<Integer> closest = this.getDocumentById(key).findClosestDocuments(allDocs, new OkapiDistance());
+            queryToDistMap.put(count, closest);
+            System.out.println("finished query " + key + " ("+count+")");
+            count++;
+        }
+
+        return queryToDistMap;
     }
 
     private boolean isNoiseWord(String word) {

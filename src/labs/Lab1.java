@@ -1,8 +1,11 @@
 package labs;
 
-import DocumentClasses.*;
-import java.io.*;
-import java.util.*;
+import DocumentClasses.DocumentCollection;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  * Create a documentcollection using documents.txt and serialize to a file
@@ -16,7 +19,7 @@ public class Lab1 {
         newDC.documentCollection("documents.txt", "document");
                 
         /* print debug results for lab 1 */
-        newDC.printResults();
+        //newDC.printResults();
         
         /* serialize document collection to file */
         try(ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(new File("docvector")))){

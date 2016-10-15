@@ -53,7 +53,10 @@ public abstract class TextVector implements Serializable {
      * @return
      */
     public int getRawFrequency(String word) {
-        return rawVector.get(word);
+        if (rawVector.containsKey(word)) {
+            return rawVector.get(word);
+        }
+        return 0;
     }
 
     /**
@@ -125,7 +128,7 @@ public abstract class TextVector implements Serializable {
      *
      * @return the square root of the sum of the squares of the frequencies.
      */
-    public double getL2Norm() {
+    double getL2Norm() {
         double frequencySum = 0.0;
 
         for (String word : rawVector.keySet()) {
@@ -142,7 +145,7 @@ public abstract class TextVector implements Serializable {
      * @param documents
      * @return the 20 closest documents' IDs in a list.
      */
-    public ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
+    ArrayList<Integer> findClosestDocuments(DocumentCollection documents, DocumentDistance distanceAlg) {
         HashMap<Integer, Double> distanceMap = new HashMap<>();
         for (Integer i : documents.documents.keySet()) {
 
@@ -167,7 +170,7 @@ public abstract class TextVector implements Serializable {
         return ids;
     }
 
-    public double log(double x, int base)
+    double log(double x, double base)
     {
         return (Math.log(x) / Math.log(base));
     }
