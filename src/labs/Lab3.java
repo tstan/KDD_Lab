@@ -105,7 +105,8 @@ public class Lab3 {
 
     public static void main(String args[]) throws IOException {
 
-        //Lab2.main(new String[]{});
+        //re-run lab 2 and 1
+        Lab2.main(new String[]{});
 
         //deserialize objects from Lab2 into accessible objects
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File("documents_vector")))) {
@@ -128,24 +129,25 @@ public class Lab3 {
         }
 
         // commented out to save okapi distances for caching
-
+/*
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File("okapi_dist_map")))) {
             okapiClosenessMap = (ClosenessMap) is.readObject();
         }
         catch (Exception e) {
             System.out.println(e);
         }
-
         okapiResults = okapiClosenessMap.getMap();
+*/
+
         cosineResults = cosineClosenessMap.getMap();
 
-/*
         //calculate top 20 using okapi
         System.out.println("getting okapi distances... might take awhile...");
         double currentTime = System.currentTimeMillis();
         okapiResults = queries.getClosestOkapiDistance(documents);
         Lab2.printElapsed(currentTime);
-*/
+
+        //store okapi results into an object and serialize for storage
         ClosenessMap cMap = new ClosenessMap(okapiResults);
 
         try(ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(new File("okapi_dist_map")))){
@@ -155,6 +157,7 @@ public class Lab3 {
             System.out.println(e);
         }
 
+        //Compute and print the MAP scores for cosine and okapi.
         computeMapHelper();
     }
 
