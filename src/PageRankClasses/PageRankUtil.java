@@ -83,9 +83,11 @@ public class PageRankUtil {
         // move new to old
         pageRankOld = (HashMap<Integer, Double>) pageRankNew.clone();
 
+        double total = 0.0;
+
         // calculate page rank for every node for this iteration
         for (Integer node : nodes) {
-            double currentVal = pageRankOld.get(node);
+            //double currentVal = pageRankOld.get(node);
             double adjacentWeightSum = 0.0;
 
             // for each node pointing inward, adjust weight based on their weight
@@ -96,9 +98,15 @@ public class PageRankUtil {
 
             double PROB_D = 0.9;
             double PROB_1_MINUS_D = 0.1;
-            double newVal = (PROB_1_MINUS_D * currentVal) + (PROB_D * adjacentWeightSum);
+            double newVal = (PROB_1_MINUS_D * (1.0/(double)nodes.size())) + (PROB_D * adjacentWeightSum);
 
+            total += newVal;
             pageRankNew.replace(node, newVal);
+        }
+
+        // normalize to equal 1
+        for (Integer node : nodes) {
+            pageRankNew.replace(node, pageRankNew.get(node)/total);
         }
     }
 
