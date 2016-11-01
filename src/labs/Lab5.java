@@ -1,7 +1,6 @@
 package labs;
 
 import Apriori.ItemSet;
-import com.sun.tools.javac.jvm.Items;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,22 +8,28 @@ import java.util.*;
 
 import static Apriori.ItemSet.getSubsets;
 
-/**
- * Created by tstan on 10/26/16.
- */
 public class Lab5 {
-    public static final double MIN_SUPPORT = 0.01; // set / total sets
+    private static final double MIN_SUPPORT = 0.01; // set / total sets
 
-    public static ArrayList<ItemSet> transactions = new ArrayList<>(); //lists of all itemsets
+    private static ArrayList<ItemSet> transactions = new ArrayList<>(); //lists of all itemsets
 
-    public static HashSet<Integer> items = new HashSet<>(); //set of all items
+    private static HashSet<Integer> items = new HashSet<>(); //set of all items
 
     //lists frequent itemsets. E.g., for key=1, store all 1-itemsets, for key=2, all 2-itemsets and so on.
-    public static HashMap<Integer, ArrayList<ItemSet>> frequentItemSet = new HashMap<>();
+    static HashMap<Integer, ArrayList<ItemSet>> frequentItemSet = new HashMap<>();
 
+
+    static double findSupport(Collection<Integer> list) {
+        for (ItemSet itemSet : frequentItemSet.get(list.size())) {
+            if (itemSet.getItems().containsAll(list)) {
+                return itemSet.getSupport();
+            }
+        }
+        return 0.0;
+    }
 
     //processes the input file
-    public static void process(String fileName) throws FileNotFoundException {
+    static void process(String fileName) throws FileNotFoundException {
         Scanner input = new Scanner(new File(fileName));
 
         while (input.hasNext()) {
@@ -41,8 +46,7 @@ public class Lab5 {
     }
 
     //finds all k-itemsets, Returns false if no itemsets were found (precondition k>=2)
-    public static boolean findFrequentItemSets(int k) {
-
+    static boolean findFrequentItemSets(int k) {
         findFrequentSingleItemSets();
 
         for (int i = 2; i <= k; i++) {
@@ -50,19 +54,29 @@ public class Lab5 {
 
             ArrayList<ItemSet> candidates = generateCandidates(frequentItemSet.get(i - 1));
 
+            if (candidates.isEmpty()) {
+                return false;
+            }
+
             // check each itemset has at least minimum support value
             for (ItemSet items : candidates) {
-                if (isFrequent(items)) {
+                double supp = isFrequent(items);
+                if (supp > MIN_SUPPORT) {
+                    items.setSupport(supp);
                     frequentItemSet.get(i).add(items);
                 }
+            }
+
+            if (frequentItemSet.get(i).isEmpty()) {
+                return false;
             }
         }
 
         return frequentItemSet.size() >= 2;
     }
 
-    //tells if the itemset is frequent, i.e., meets the minimum support
-    public static boolean isFrequent(ItemSet itemSet) {
+    //tells if the ItemSet is frequent, i.e., meets the minimum support
+    private static double isFrequent(ItemSet itemSet) {
         int count = 0;
         for (ItemSet transaction : transactions) {
             if (transaction.contains(itemSet.getItems())) {
@@ -70,14 +84,11 @@ public class Lab5 {
             }
         }
 
-        // doesn't actually do anything lol, because pass by value
-        itemSet.setSupport((double) count / (double) transactions.size());
-
-        return itemSet.getSupport() >= MIN_SUPPORT;
+        return (double) count / (double) transactions.size();
     }
 
     // generates superset candidates for previous set (k-1)
-    public static ArrayList<ItemSet> generateCandidates (ArrayList<ItemSet> previous) {
+    private static ArrayList<ItemSet> generateCandidates(ArrayList<ItemSet> previous) {
         ArrayList<ItemSet> candidates = new ArrayList<>();
 
         //join step
@@ -113,7 +124,8 @@ public class Lab5 {
         return result;
     }
 
-    public static boolean hasSubset(Set<Integer> subset, ArrayList<ItemSet> previous) {
+    // helper method to check if a list of ItemSets contains a subset
+    private static boolean hasSubset(Set<Integer> subset, ArrayList<ItemSet> previous) {
         for (ItemSet items : previous) {
             if (items.containsSubset(subset)) {
                 return true;
@@ -122,8 +134,8 @@ public class Lab5 {
         return false;
     }
 
-    //finds all 1-itemsets
-    public static void findFrequentSingleItemSets() {
+    // finds all 1-itemsets
+    private static void findFrequentSingleItemSets() {
         ArrayList<ItemSet> oneItemSets = new ArrayList<>();
 
         HashMap<Integer, Integer> itemToCount = new HashMap<>();
@@ -154,7 +166,6 @@ public class Lab5 {
 
     public static void main(String args[]) throws FileNotFoundException {
         Lab5.process("shopping_data.txt");
-        findFrequentSingleItemSets();
         findFrequentItemSets(5);
 
         System.out.println(frequentItemSet.toString());
