@@ -6,7 +6,6 @@ import Apriori.Rule;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,9 +17,6 @@ import static labs.AprioriCalc.findFrequentItemSets;
 public class AprioriFrequentSet {
 
     private static final double MIN_CONFIDENCE = 0.99; // set / total sets
-
-    //lists frequent itemsets. E.g., for key=1, store all 1-itemsets, for key=2, all 2-itemsets and so on.
-    private static HashMap<Integer, ArrayList<ItemSet>> frequentItemSet = new HashMap<>();
 
     //stores the result
     private static ArrayList<Rule> rules = new ArrayList<>();
