@@ -1,6 +1,6 @@
 package DecisionTree;
 
-import labs.Lab7;
+import Mains.DecisionTreer;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class NaiveMatrix extends Matrix {
     }
 
     public static void main(String args[]) throws FileNotFoundException {
-        NaiveMatrix matrix = new NaiveMatrix(Lab7.process("data.txt"));
+        NaiveMatrix matrix = new NaiveMatrix(DecisionTreer.process("data.txt"));
 
         ArrayList<Integer> indices = matrix.findAllRows();
         int categoryAttr = matrix.getCategoryAttribute();

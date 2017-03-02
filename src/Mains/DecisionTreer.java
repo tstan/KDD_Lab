@@ -1,4 +1,4 @@
-package labs;
+package Mains;
 
 
 import DecisionTree.Matrix;
@@ -15,7 +15,7 @@ import java.util.Scanner;
  *
  * decision tree implementation
  */
-public class Lab7 {
+public class DecisionTreer {
 
     private static double THRESHOLD = 0.01;
 
@@ -67,7 +67,6 @@ public class Lab7 {
      * @param attributes
      * @param rows
      * @param level
-     * @param currentIGR
      */
     public static void printDecisionTree(ArrayList<Integer> attributes,
                                          ArrayList<Integer> rows,

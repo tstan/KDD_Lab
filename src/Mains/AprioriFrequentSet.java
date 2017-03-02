@@ -1,4 +1,4 @@
-package labs;
+package Mains;
 
 import Apriori.ItemSet;
 import Apriori.Rule;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static labs.AprioriCalc.findFrequentItemSets;
+import static Mains.AprioriCalc.findFrequentItemSets;
 
 /**
  * step 2 of apriori algorithm

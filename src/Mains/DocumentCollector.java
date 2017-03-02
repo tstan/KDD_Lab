@@ -1,4 +1,4 @@
-package labs;
+package Mains;
 
 import DocumentClasses.DocumentCollection;
 

@@ -1,4 +1,4 @@
-package labs;
+package Mains;
 
 import DecisionTree.NaiveMatrix;
 
@@ -9,7 +9,7 @@ import java.util.Scanner;
  * Naive Bayes Algorithm Implementation
  * @since 11/25/2016
  */
-public class Lab8 {
+public class NaiveBayeser {
 
     public static int[] userInput() {
         Scanner input = new Scanner(System.in);
@@ -24,7 +24,7 @@ public class Lab8 {
 
     public static void main(String args[]) throws FileNotFoundException {
         //read in file
-        NaiveMatrix naiveMatrix = new NaiveMatrix(Lab7.process("data.txt"));
+        NaiveMatrix naiveMatrix = new NaiveMatrix(DecisionTreer.process("data.txt"));
         int userChoices[] = userInput();
 
         // do calculation

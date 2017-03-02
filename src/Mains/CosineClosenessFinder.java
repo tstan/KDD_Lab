@@ -1,4 +1,4 @@
-package labs;
+package Mains;
 
 import DocumentClasses.ClosenessMap;
 import DocumentClasses.DocumentCollection;
