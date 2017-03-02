@@ -9,9 +9,11 @@ import java.io.ObjectOutputStream;
 
 /**
  * Create a documentcollection using documents.txt and serialize to a file
+ *
+ * Prepares documents into text vectors to use in CosineCloseness and OkapiCloseness
  * @author tstan
  */
-public class Lab1 {
+public class DocumentCollector {
     
     public static void main(String args[]) throws IOException{
         

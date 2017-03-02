@@ -15,7 +15,7 @@ import java.util.Scanner;
  * The key will be the query number and the value will be an array list of the IDs of the documents
  * that are relevant in ranked order.
  */
-public class Lab3 {
+public class OkapiClosenessFinder {
     public static final int MAP_LIMIT = 19;
 
     public static DocumentCollection documents;
@@ -106,9 +106,9 @@ public class Lab3 {
     public static void main(String args[]) throws IOException {
 
         //re-run lab 2 and 1
-        Lab2.main(new String[]{});
+        CosineClosenessFinder.main(new String[]{});
 
-        //deserialize objects from Lab2 into accessible objects
+        //deserialize objects from CosineClosenessFinder into accessible objects
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File("documents_vector")))) {
             documents = (DocumentCollection) is.readObject();
         }
@@ -145,7 +145,7 @@ public class Lab3 {
         System.out.println("getting okapi distances... might take awhile...");
         double currentTime = System.currentTimeMillis();
         okapiResults = queries.getClosestOkapiDistance(documents);
-        Lab2.printElapsed(currentTime);
+        CosineClosenessFinder.printElapsed(currentTime);
 
         //store okapi results into an object and serialize for storage
         ClosenessMap cMap = new ClosenessMap(okapiResults);
@@ -162,7 +162,7 @@ public class Lab3 {
     }
 
     public static void computeMapHelper() throws FileNotFoundException {
-        HashMap<Integer, ArrayList<Integer>> humanJudgement = Lab3.digestHumanJudgmentDoc();
+        HashMap<Integer, ArrayList<Integer>> humanJudgement = OkapiClosenessFinder.digestHumanJudgmentDoc();
 
         System.out.println("Cosine MAP = " +
                 computeMAP(humanJudgement, cosineResults));

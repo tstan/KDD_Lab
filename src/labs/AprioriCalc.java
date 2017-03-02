@@ -8,7 +8,11 @@ import java.util.*;
 
 import static Apriori.ItemSet.getSubsets;
 
-public class Lab5 {
+/**
+ * Implementation of apriori algorithm to find frequent itemsets
+ * e.g. for recommendations when purchasing or classes you should take
+ */
+public class AprioriCalc {
     private static final double MIN_SUPPORT = 0.01; // set / total sets
 
     private static ArrayList<ItemSet> transactions = new ArrayList<>(); //lists of all itemsets
@@ -165,7 +169,7 @@ public class Lab5 {
     }
 
     public static void main(String args[]) throws FileNotFoundException {
-        Lab5.process("shopping_data.txt");
+        AprioriCalc.process("shopping_data.txt");
         findFrequentItemSets(5);
 
         System.out.println(frequentItemSet.toString());

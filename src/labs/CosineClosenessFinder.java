@@ -13,7 +13,7 @@ import java.util.HashMap;
  *
  * @author tstan
  */
-public class Lab2 {
+public class CosineClosenessFinder {
 
     // change this to process more or less queries.
     public static final int TOTAL_TO_PROCESS = 21;
@@ -28,9 +28,9 @@ public class Lab2 {
 
     public static void main(String args[]) throws IOException, IndexOutOfBoundsException {
 
-        Lab1.main(new String[]{});
+        DocumentCollector.main(new String[]{});
 
-        //deserialize docvector from Lab1 into DocumentCollection
+        //deserialize docvector from DocumentCollector into DocumentCollection
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(new File("docvector")))) {
             documents = (DocumentCollection) is.readObject();
         }
@@ -47,14 +47,14 @@ public class Lab2 {
         double currentTime = System.currentTimeMillis();
         queries.normalize(documents);
         documents.normalize(documents);
-        Lab2.printElapsed(currentTime);
+        CosineClosenessFinder.printElapsed(currentTime);
 
         //calculate cosine distance and print 20 closest, return hashmap to be used for part 3.
         System.out.println("Calculating cosine distances...");
         currentTime = System.currentTimeMillis();
         HashMap<Integer, ArrayList<Integer>> qToDocMap =
                 queries.printClosestDocsCosineDistance(TOTAL_TO_PROCESS, documents);
-        Lab2.printElapsed(currentTime);
+        CosineClosenessFinder.printElapsed(currentTime);
 
         ClosenessMap closenessMap = new ClosenessMap(qToDocMap);
 

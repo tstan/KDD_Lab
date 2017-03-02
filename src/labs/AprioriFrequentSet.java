@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static labs.Lab5.findFrequentItemSets;
+import static labs.AprioriCalc.findFrequentItemSets;
 
 /**
  * step 2 of apriori algorithm
  */
-public class Lab6 {
+public class AprioriFrequentSet {
 
     private static final double MIN_CONFIDENCE = 0.99; // set / total sets
 
@@ -39,7 +39,7 @@ public class Lab6 {
                     .forEachOrdered(right -> {
                         ItemSet leftIS = new ItemSet();
                         leftIS.setItems(new ArrayList<>(left));
-                        leftIS.setSupport(Lab5.findSupport(left));
+                        leftIS.setSupport(AprioriCalc.findSupport(left));
 
                         ItemSet rightIS = new ItemSet();
                         rightIS.setItems(new ArrayList<>(right));
@@ -60,16 +60,16 @@ public class Lab6 {
     private static void generateRules() throws FileNotFoundException {
 
         //get frequent item sets
-        Lab5.process("shopping_data.txt");
+        AprioriCalc.process("shopping_data.txt");
         findFrequentItemSets(5);
 
         // for each itemSet, generate rules
-        for (ArrayList<ItemSet> isList : Lab5.frequentItemSet.values()) {
+        for (ArrayList<ItemSet> isList : AprioriCalc.frequentItemSet.values()) {
             for (ItemSet is : isList) {
                 ArrayList<Rule> candidateRules = split(is);
 
                 // for each generated rule, if minimum confidence is met, add to final rules list
-                rules.addAll(candidateRules.stream().filter(Lab6::isMinConfidenceMet).collect(Collectors.toList()));
+                rules.addAll(candidateRules.stream().filter(AprioriFrequentSet::isMinConfidenceMet).collect(Collectors.toList()));
             }
         }
 
